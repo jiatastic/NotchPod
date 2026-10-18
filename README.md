@@ -1,81 +1,118 @@
-# Listen
+<h1 align="center">
+  <img src="docs/images/icon.png" alt="Earshot" width="128">
+  <br>
+  Earshot
+</h1>
 
-**A podcast player in your notch.** Nothing to manage. Just listen.
+<p align="center">
+  <b>A podcast player that lives in your MacBook's notch, with live bilingual captions.</b>
+  <br>
+  Hover to listen. Glance to understand. Nothing to manage.
+</p>
 
-Version 0.9.0 refines the notch and adds the **caption UI**. Every notch page shares one 20pt gutter; buttons scale slightly on press; list rows get a hover fill with the trailing glyph shown only on hover/selection; artwork is larger (48pt in the player) with continuous corners and a faint hairline; the native slider is replaced by a thin scrubber that thickens on hover/drag, with proportional-digit elapsed/remaining time. Search shows one loading indicator (the field spinner), and the region picker is removed: the directory storefront follows the Mac's region. Captions (menu bar **Captions → Off / Original / Bilingual**) follow Immersive Translate's bilingual pattern: the original sentence stays primary and the translation sits beneath it, quieter. While playing and tucked, a single-line, 420pt caption strip hangs under the camera (the translation in Bilingual mode, else the original); it stays put across pauses between sentences, is click-through, and never triggers hover-open. With a transcript, **⟲** and **⌘←** return to the start of the current sentence (or the previous one within 1.5s) instead of 15 seconds. Captions are **transcribed on this Mac** (`SFSpeechRecognizer`, on-device only, punctuation on): the episode audio is cached once, then 45s chunks are recognized nearest-the-playhead first (about 20× real time here), every finalized utterance is kept, and words become short cues (at most 10 words or 4s) by punctuation, pauses and length. Language comes from the episode text (`NLLanguageRecognizer`). Bilingual mode translates into the first preferred system language with Apple's on-device Translation (macOS 15+), nearest-the-playhead first, and only once both language packs are installed; otherwise a one-line notice points to System Settings › General › Language & Region › Translation Languages. Transcripts (not translations) are cached in `~/Library/Caches/QuietCast/Transcripts`; the temporary audio is deleted when transcription finishes. First use asks for Speech Recognition permission. `defaults write com.quietcast.mac captionDemo -bool true` substitutes a fixed demo transcript for UI review.
+<p align="center">
+  <img src="https://img.shields.io/badge/macOS-14%2B-black?logo=apple" alt="macOS 14+">
+  <img src="https://img.shields.io/badge/Swift-6-F05138?logo=swift&logoColor=white" alt="Swift 6">
+  <img src="https://img.shields.io/badge/dependencies-none-brightgreen" alt="No dependencies">
+  <img src="https://img.shields.io/badge/privacy-on--device-blue" alt="On-device">
+</p>
 
-Version 0.8.0 adds **live episode and show search in the same field**. Pause typing for 350ms to query Apple's directory; Return is not required. Results are grouped into Episodes and Shows, with episodes first. Click an episode to play publisher audio/video directly; click a show to open its RSS episodes. IME marked text is held until composition commits. Query changes cancel older work, stale rows cannot play, and closing search cancels pending episode resolution. Ten successful searches are cached in memory for five minutes; partial category failures keep the other category visible with a retry hint. No new search entrance, account, server, theme or notes UI is added.
+<p align="center">
+  <img src="docs/images/player.png" alt="Earshot open in the notch, showing an episode with English and Chinese captions" width="820">
+</p>
 
-Version 0.7.3 separates hover intent from animation: 225ms entry dwell, 250ms departure grace and a stable expanded retention region with 12pt edge tolerance. The closed trigger stays at the tucked body's actual size, excluding transparent shoulders; moving over a shrinking panel no longer counts as entering the notch. Dismissal under the pointer requires leaving the trigger before hover can reopen. A single native opaque sRGB-black silhouette now sits behind transparent player/search content, with vibrancy disabled and an explicit sRGB window color space. Physical black matching remains unverified.
+Earshot turns the notch into a quiet little podcast player. Hover over the camera and the player slides out; move away and it tucks back in while the audio keeps going. It has no main window, no Dock icon and no account.
 
-Version 0.7.2 introduced one pure-black surface and widens playback to 400pt (search: 420pt). Expand/collapse now retain the same mounted content inside a continuously resized viewport, driven by an interruptible critically damped window-frame spring. Collapsed playback shows an 18pt cover and three tiny status bars beside the camera. Light/System themes and appearance selectors remain removed.
+Turn on captions and Earshot **transcribes the episode on your Mac** a little ahead of where you're listening, then **translates it into your language**. While you work, the current line sits under the notch, so a glance is enough to follow a podcast in a language you're still learning.
 
-Version 0.7 simplified the app to **tucked / open**. There is one compact player, not a preview and a second full player. Episode notes are removed, including from the legacy window components. Interface copy is English; original podcast titles are preserved.
+<p align="center">
+  <img src="docs/images/captions-tucked.png" alt="A one-line translated caption hanging under the tucked notch" width="820">
+</p>
 
-## Run
+## Features
 
-Requires macOS 14+ and Swift 6+ Command Line Tools or Xcode. No third-party dependencies.
+- **Lives in the notch.** Hover to open, move away to tuck. Opening uses an interruptible spring animation and never steals keyboard focus.
+- **Live bilingual captions.** The original line stays primary and the translation sits underneath, in the style of [Immersive Translate](https://immersivetranslate.com). While the notch is tucked, one line of caption hangs below the camera. Clicks pass through it to the apps underneath.
+- **Look-ahead transcription.** Audio is recognized in 45-second chunks starting at the playhead, about 20× faster than real time on Apple Silicon, so captions are ready before you hear the words.
+- **Sentence-aware rewind.** With captions on, ⟲ goes back to the start of the sentence you just missed instead of a blind 15 seconds.
+- **Search everything from one field.** Episodes and shows from Apple's podcast directory appear as you type. Click an episode to play it right away. Any public RSS feed works too, including video podcasts.
+- **Remembers where you were.** Following, recent listening, per-episode progress, media keys and 0.8–2× speed.
 
-```sh
+<p align="center">
+  <img src="docs/images/search.png" alt="Search results for 'design' showing episodes with artwork" width="420">
+</p>
+
+## Private by design
+
+| | |
+| --- | --- |
+| **Speech recognition** | On-device only (`SFSpeechRecognizer` with `requiresOnDeviceRecognition`). Audio never leaves your Mac. |
+| **Translation** | Apple's on-device Translation framework. No API keys, no cloud. |
+| **Accounts and analytics** | None. No server, no tracking, no sync. |
+| **Network** | Apple's podcast directory for search, and publishers for feeds, artwork and audio. That's all. |
+| **Permissions** | Speech Recognition, asked once, the first time you turn on captions. No Accessibility or Screen Recording. |
+
+## Installation
+
+**Requirements**
+- A Mac with a notch, running macOS 14 Sonoma or later. On Macs without a notch, Earshot opens as a menu-bar popover instead.
+- macOS 15 or later for caption translation. Transcription works on 14.
+- Xcode or the Command Line Tools with Swift 6, to build.
+
+There are no prebuilt releases yet, so build it from source:
+
+```bash
+git clone https://github.com/jiatastic/Earshot.git
+cd Earshot
 bash scripts/build-app.sh
 open dist/Listen.app
 ```
 
-The bundle is locally ad-hoc signed, not notarized for distribution. The package/executable and project directory still use QuietCast internally to preserve existing data and tooling.
+> [!NOTE]
+> The app is ad-hoc signed and not notarized. If macOS blocks it, run `xattr -dr com.apple.quarantine dist/Listen.app` and open it again.
 
-## How it works
+## Usage
 
-1. **Hover the physical notch:** the only player opens directly. No click-through to a larger player, brand header, toolbar, pin or collapse button. The camera area is left empty. When an episode is loaded, narrow side wings show artwork and playing/paused/buffering status while tucked; these are indicators, not a second set of controls.
-2. **Listen:** artwork, episode title, one play/pause button, 15-second rewind, 30-second forward and a seek bar. No episode notes or clickable title leading to another screen.
-3. **Find another podcast:** the single search icon opens search, following and recent listening together. An empty search field shows the local library; typing automatically searches Apple's directory after a 350ms pause. Episode results show their title, show and duration; a click plays the episode without first opening the show. Follow a show from its episode list.
-4. **Leave:** collapse starts 250ms after leaving the expanded retention region, which includes 12pt edge tolerance; returning cancels the pending close. Audio continues. Editing, dragging and menus are protected. Esc or an outside click closes the surface. There is no pin setting.
-5. **Advanced options:** the menu-bar waveform holds RSS entry, speed, video visibility, display selection and Quit. There is no main window or Dock icon.
+1. **Hover the notch** to open the player. Move away and it tucks back in; the audio keeps playing.
+2. **Click 🔍** to search for an episode or show, or to pick from what you follow and listened to recently.
+3. **Turn on captions** from the menu-bar waveform: **Captions → Original** or **Bilingual**.
+4. **For translations,** download your language once in **System Settings → General → Language & Region → Translation Languages**. Earshot shows a reminder if it's missing.
 
-On a display without a verified camera notch, the app uses a **native menu-bar popover**, not a fake black notch at the top center. Click the waveform and choose **Show Player** or **Search Episodes & Shows**. It uses normal system outside-click dismissal.
+| Shortcut | Action |
+| --- | --- |
+| `⌘K` | Search |
+| `Space` / `⌘P` | Play / pause |
+| `⌘←` | Back one sentence (or 15s without captions) |
+| `⌘→` | Forward 30s |
+| `Esc` | Tuck the notch |
 
-Notch geometry uses `NSScreen.safeAreaInsets` and the two auxiliary top-area rectangles in global points. The panel is only shown when these identify a real cutout; there is no guessed camera width. On notched displays, expansion stays centered and attached to the physical top, without taking keyboard focus on hover. Native active-always tracking areas and local/global mouse-only monitors prompt coordinate checks; a low-frequency pointer fallback covers the camera area. Hover entry waits 225ms inside the fixed tucked-body trigger and departure waits 250ms outside the fixed expanded region plus 12pt padding. Neither region follows the animated window frame. Pending entry is cancelled on departure and rechecks actual coordinates before opening; no keyboard focus is taken on hover. Frame updates use a critically damped spring (open frequency 48/s, close 58/s), preserving current size/velocity on reversal. Keyboard actions and Reduce Motion are immediate. The artwork/status indicator fades with actual viewport expansion; only its three small Core Animation bars loop during active playback, with a static equivalent for Reduce Motion.
+Shortcuts work while the player has focus.
 
-## Playback and discovery
+## Roadmap
 
-- iTunes-directory episode/show search (storefront follows the Mac's region setting, falling back to US; there is no region picker) and public RSS feeds, with no account. Search is automatic after a 350ms typing pause; **↑ / ↓** selects results and **Return** plays an episode or opens a show. IME composition keeps normal native text behavior and never sends unfinished marked text.
-- Episode discovery uses Apple's `podcastEpisode` entity. Playback uses only its full publisher `episodeUrl` or a matched RSS enclosure, never `previewUrl` or an Apple webpage. When a feed URL is absent, the parent show is resolved via Apple's lookup endpoint. Cached RSS episodes/GUIDs preserve feed-scoped IDs and progress; missing metadata falls back to RSS, and unavailable episodes show an inline error without stopping the current player. Search coverage and availability depend on Apple's regional index and publishers.
-- Following, recent listening, local seek progress, media keys and 0.8–2× speed remain. A restored episode is always paused. The 20-feed session cache refreshes in the background and retains cached episodes on errors.
-- Public RSS video plays through the same AVPlayer. Use the menu-bar **Show Video / Hide Video** item; hiding the picture does not stop sound or reduce stream bandwidth. A public example is `https://feeds.twit.tv/twit_video_hd.xml`.
-- Episode artwork falls back to the show cover, then a waveform placeholder. Shared requests, off-main thumbnail decoding and a bounded image cache avoid unstable artwork/layout.
-- The entire app stays dark, regardless of system appearance or old preferences. There is no theme selector. Platform-exclusive media, private feeds requiring authentication and YouTube watch-page URLs are unsupported.
+- [x] Notch player with hover-to-open spring motion
+- [x] Unified episode and show search
+- [x] Public RSS, including video podcasts
+- [x] On-device look-ahead transcription
+- [x] Bilingual captions with on-device translation
+- [x] Sentence-aware rewind
+- [ ] Notarized releases and a Homebrew cask
+- [ ] `SpeechAnalyzer` (macOS 26) for better long-form accuracy and punctuation
+- [ ] Choose the translation language in the app
+- [ ] Click a word in a caption to look it up
+- [ ] Search inside an episode's transcript and jump to that moment
 
-While the player/popover has focus: **⌘K** opens search, **⌘P** toggles playback, **Space** toggles playback outside text editing on the player, **⌘← / ⌘→** skips (⌘← rewinds by sentence when captions are on), and **Esc** closes. These are not global shortcuts.
+## Development
 
-## Local data and privacy
-
-Existing data stays at `~/Library/Application Support/QuietCast/library.json`, including up to 200 recent listening records. Bundle ID `com.quietcast.mac`, and record compatibility are preserved. Old appearance preferences are ignored. `notchDisplay` selects the display. Previous pin/side-placement preferences are ignored. Historical RSS descriptions may remain in stored records for compatibility, but there is no notes UI.
-
-No accounts, analytics, cloud sync, offline downloads, queues or cloud AI. Captions use only on-device speech recognition and translation; episode audio is cached temporarily for transcription and transcripts are cached locally (see 0.9.0). Apple receives directory queries automatically after the typing pause (not during IME composition), plus show lookups when needed; publishers receive feed, image and media requests. The app requests neither Accessibility nor Screen Recording and does not inspect other apps' content. It manages its own panel and uses pointer position for notch hover.
-
-## Verification status
-
-**Version 0.9.0:** `bash scripts/test.sh` passes (including new caption lookup/rewind checks; the script now also compiles `DirectorySearch.swift` and `Captions.swift`). Notch pages, including bilingual/original captions and the tucked caption strip, were rendered offscreen from live NPR/Apple directory data and reviewed. Physical-notch hover, scrubber dragging, press feedback and caption-strip resizing on hardware remain unverified.
-
-**Version 0.8.0 is compile/package-only at the user's request. No test harnesses, screenshots, live playback checks or notch/popover interaction tests were run for this change.** Build success does not verify live search responses, IME timing, search-to-play resolution, physical alignment, perceived color matching with the hardware notch, hover timing, focus, full-screen Spaces or display-switching behavior. New directory parser/identity fixtures in `Tests/QuietCastTests/DirectorySearchTests.swift` are authored but unrun.
-
-The existing core harness remains available for a later authorized pass:
-
-```sh
-bash scripts/test.sh
-QUIETCAST_LIVE_TESTS=1 bash scripts/test.sh
-QUIETCAST_LIVE_TESTS=1 QUIETCAST_VIDEO_TESTS=1 bash scripts/test.sh
+```bash
+bash scripts/test.sh                              # parsing, persistence and caption checks
+QUIETCAST_LIVE_TESTS=1 bash scripts/test.sh       # also hits the live directory and plays audio
 ```
 
-Those checks cover parsing, filtering, compatible record decoding, persistence and optional real playback, not native notch/popover interaction. XCTest equivalents require full Xcode; the standalone harness supports Command Line Tools.
+The project has no third-party dependencies. [`docs/DEVELOPMENT.md`](docs/DEVELOPMENT.md) covers architecture, notch geometry, hover timing, privacy details and verification status. Version history is in [`CHANGELOG.md`](CHANGELOG.md).
 
-`scripts/swift.sh` applies project-local compatibility fixes for this Mac's toolchain without editing system SDK files.
+## Acknowledgments
 
-## Source
-
-- `QuietCastApp.swift`, `NotchController.swift`: accessory lifecycle, two-state presentation, verified camera geometry, native popover fallback and menu bar.
-- `NotchView.swift`, `NotchNowPlaying.swift`, `SearchPanel.swift`: one compact player, collapsed artwork/status, unified search/library, episode list and RSS entry. `NotchMotion.swift` provides frame springs, the shared native black silhouette, native hover tracking and compositor-driven activity bars.
-- `DirectorySearch.swift`, `PodcastService.swift`, `Library.swift`: episode/show directory metadata, debounced/cancellable search, bounded caches, publisher episode resolution and RSS/library handling.
-- `Models.swift`, `Player.swift`: backward-compatible persisted records and the shared playback engine.
-- `Appearance.swift`, `Artwork.swift`: one dark palette, the shared 20pt gutter, press/row button styles, and shared image loading/fallbacks.
-- `Captions.swift`: caption cues, Off/Original/Bilingual mode, cue-boundary publishing, translation gating, sentence-aware rewind and the demo transcript. `Transcription.swift`: on-device look-ahead transcription, cue splitting and the transcript cache. Caption views (`CaptionView`, `CaptionLine`) and `CaptionTranslator` live in `NotchNowPlaying.swift`.
-- Legacy `ContentView.swift`, `PlayerBar.swift`, `VideoPane.swift` and snapshot tooling remain for reference/shared media components. The large-window UI is not opened. Old snapshots do not validate the notch or popover.
+- [boring.notch](https://github.com/TheBoredTeam/boring.notch) showed how much a notch can do.
+- [Immersive Translate](https://immersivetranslate.com) and [Language Reactor](https://www.languagereactor.com) inspired the bilingual caption layout and sentence-level rewind.
+- Apple's Speech, Translation and AVFoundation frameworks do the heavy lifting, entirely on-device.
