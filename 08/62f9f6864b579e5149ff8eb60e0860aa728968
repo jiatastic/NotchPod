@@ -1,0 +1,53 @@
+README.md
+  s_f8ccdb591199da::t_6f0f865897c070 2,4,18,22,25,27,59,63-76,79-80,82,89-90,112,130-133
+  s_f8ccdb591199da::t_f0d10b0a27c4e8 61
+Sources/QuietCast/Captions.swift
+  s_f8ccdb591199da::t_ca5eb15218e962 42-48,108,110
+  s_f8ccdb591199da::t_59a813e36ab303 63-66,121-130,170,203,212
+  s_f8ccdb591199da::t_52897eee70f951 32,40-41,49-51,84-87,109,111,196,211
+Resources/Info.plist
+  s_f8ccdb591199da::t_640af5cfed1211 8,20,39
+Sources/QuietCast/NotchController.swift
+  s_f8ccdb591199da::t_e2f87d885f93a1 37
+  s_f8ccdb591199da::t_640af5cfed1211 387,389,421
+docs/DEVELOPMENT.md
+  s_f8ccdb591199da::t_640af5cfed1211 13
+Sources/QuietCast/NotchNowPlaying.swift
+  s_f8ccdb591199da::t_80d613ccadab1a 29,172-198,303
+  s_f8ccdb591199da::t_59a813e36ab303 56-57,59-66,199,275-277,299-302
+  s_f8ccdb591199da::t_f054aea95eb110 86-87
+  s_f8ccdb591199da::t_d32c525082869a 58
+  s_f8ccdb591199da::t_49ad5e9030d9f7 200-201
+LICENSE
+  s_f8ccdb591199da::t_3557cbf0e2d747 1-675
+scripts/build-app.sh
+  s_f8ccdb591199da::t_640af5cfed1211 6
+scripts/Verify.swift
+  s_f8ccdb591199da::t_e2f87d885f93a1 122
+Sources/QuietCast/Transcription.swift
+  s_f8ccdb591199da::t_e2f87d885f93a1 178
+  s_f8ccdb591199da::t_640af5cfed1211 28
+CHANGELOG.md
+  s_f8ccdb591199da::t_f0d10b0a27c4e8 5-6
+  s_f8ccdb591199da::t_e2f87d885f93a1 7
+Sources/QuietCast/PodcastService.swift
+  s_f8ccdb591199da::t_640af5cfed1211 115
+Sources/QuietCast/QuietCastApp.swift
+  s_f8ccdb591199da::t_640af5cfed1211 40
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.23",
+  "base_commit_sha": "0862f9f6864b579e5149ff8eb60e0860aa728968",
+  "prompts": {},
+  "sessions": {
+    "s_f8ccdb591199da": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "aae79901-271d-4b7e-ab06-a55aa141c79b",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Haoxiang Jia <jiahaoxiangpersonal@gmail.com>"
+    }
+  }
+}
