@@ -1,0 +1,23 @@
+CHANGELOG.md
+  s_f8ccdb591199da::t_478fc97b19468f 1-21
+README.md
+  s_f8ccdb591199da::t_cd8405262e8e45 1-66,71-109,112,114,116-118
+docs/DEVELOPMENT.md
+  s_f8ccdb591199da::t_478fc97b19468f 1-73
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.23",
+  "base_commit_sha": "78ce8ce9b1181b4eabdc2bc228cd45103a97269b",
+  "prompts": {},
+  "sessions": {
+    "s_f8ccdb591199da": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "aae79901-271d-4b7e-ab06-a55aa141c79b",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Haoxiang Jia <jiahaoxiangpersonal@gmail.com>"
+    }
+  }
+}
