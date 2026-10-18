@@ -29,6 +29,7 @@ enum CaptionMode: String, CaseIterable {
 final class CaptionModel: ObservableObject {
     private enum Key {
         static let mode = "captionMode"
+        static let target = "captionTarget"
         // Demo transcript until a transcription engine is connected:
         // defaults write com.quietcast.mac captionDemo -bool true
         static let demo = "captionDemo"
@@ -36,6 +37,18 @@ final class CaptionModel: ObservableObject {
     @Published var mode: CaptionMode {
         didSet { UserDefaults.standard.set(mode.rawValue, forKey: Key.mode); refresh() }
     }
+    /// Translation target as a BCP-47 identifier; nil follows the system language.
+    @Published var target: String? {
+        didSet {
+            guard target != oldValue else { return }
+            UserDefaults.standard.set(target, forKey: Key.target)
+            // Translations belong to the old language.
+            cues = cues.map { var cue = $0; cue.translation = nil; return cue }
+            requestedTranslation = nil; refresh()
+        }
+    }
+    /// Languages Apple's on-device Translation offers, for the picker.
+    @Published private(set) var targets: [Locale.Language] = []
     @Published private(set) var cues: [CaptionCue] = []
     @Published private(set) var current: CaptionCue?
     /// Track + playing, not "a sentence is being spoken": gaps between cues
@@ -47,6 +60,10 @@ final class CaptionModel: ObservableObject {
     @Published private(set) var translation: TranslationPair?
     /// One quiet line under the captions, e.g. a missing translation pack.
     @Published private(set) var notice: String?
+    /// The pair whose language pack is missing; the player offers to download it.
+    @Published private(set) var missingPack: TranslationPair?
+    /// Set while the system download prompt for `missingPack` is running.
+    @Published private(set) var downloadingPack: TranslationPair?
     private var requestedTranslation: TranslationPair?
     private let transcriber = CaptionTranscriber()
     private var transcribing: String?
@@ -64,6 +81,10 @@ final class CaptionModel: ObservableObject {
     init(player: PodcastPlayer) {
         self.player = player
         mode = CaptionMode(rawValue: UserDefaults.standard.string(forKey: Key.mode) ?? "") ?? .off
+        target = UserDefaults.standard.string(forKey: Key.target)
+        if #available(macOS 15, *) {
+            Task { targets = await LanguageAvailability().supportedLanguages.sorted { Self.name($0) < Self.name($1) } }
+        }
         player.$episode.removeDuplicates { $0?.id == $1?.id }
             .sink { [weak self] in self?.load(for: $0) }.store(in: &subscriptions)
         // Seeks update position synchronously; follow them between clock ticks.
@@ -84,6 +105,10 @@ final class CaptionModel: ObservableObject {
         transcriber.cancel(); stopClock(); subscriptions.removeAll()
     }
 
+    /// "Chinese", "Chinese (Taiwan)", "English (United Kingdom)", … in the listener's locale.
+    static func name(_ language: Locale.Language) -> String {
+        Locale.current.localizedString(forIdentifier: language.minimalIdentifier) ?? language.minimalIdentifier
+    }
     /// Untranslated cues nearest ahead of the playhead first.
     func untranslated(limit: Int) -> [CaptionCue] {
         cues.filter { $0.translation == nil && $0.end > now - 5 }.prefix(limit).map { $0 }
@@ -92,6 +117,16 @@ final class CaptionModel: ObservableObject {
         guard !translations.isEmpty else { return }
         cues = cues.map { var cue = $0; cue.translation = translations[cue.id] ?? cue.translation; return cue }
         if let current { self.current = cues.first { $0.id == current.id } }
+    }
+    func downloadMissingPack() {
+        guard let missingPack else { return }
+        downloadingPack = missingPack
+    }
+    /// After the system prompt: re-check, since the person may have declined.
+    func finishPackDownload() {
+        downloadingPack = nil
+        requestedTranslation = nil
+        updateTranslation()
     }
     func translationFailed(_ message: String) {
         translation = nil; notice = message
@@ -132,6 +167,7 @@ final class CaptionModel: ObservableObject {
         episodeID = episode?.id
         transcriber.cancel(); transcribing = nil
         cues = []; current = nil; status = nil; translation = nil; requestedTranslation = nil; notice = nil
+        missingPack = nil; downloadingPack = nil
         sourceLocale = nil; now = player.position
         if let episode, UserDefaults.standard.bool(forKey: Key.demo) {
             attach(CaptionDemo.cues(duration: max(episode.duration, 600)), episodeID: episode.id)
@@ -157,14 +193,14 @@ final class CaptionModel: ObservableObject {
     /// Translation runs only once both language packs are on this Mac; a
     /// missing pack gets a pointer to Settings instead of a hidden download prompt.
     private func updateTranslation() {
-        let target = Locale.Language(identifier: Locale.preferredLanguages.first ?? Locale.current.identifier)
+        let target = Locale.Language(identifier: self.target ?? Locale.preferredLanguages.first ?? Locale.current.identifier)
         let pair = sourceLocale.flatMap { source in
             mode == .bilingual && source.language.languageCode != target.languageCode
                 ? TranslationPair(source: source.language, target: target) : nil
         }
         guard pair != requestedTranslation else { return }
         requestedTranslation = pair
-        translation = nil; notice = nil
+        translation = nil; notice = nil; missingPack = nil
         guard let pair, #available(macOS 15, *) else { return }
         Task {
             let status = await LanguageAvailability().status(from: pair.source, to: pair.target)
@@ -172,8 +208,8 @@ final class CaptionModel: ObservableObject {
             switch status {
             case .installed: translation = pair
             case .supported:
-                let name = Locale.current.localizedString(forLanguageCode: pair.target.languageCode?.identifier ?? "") ?? "your language"
-                notice = "Download \(name) in System Settings › General › Language & Region › Translation Languages to see translations."
+                notice = "\(Self.name(pair.target)) translations need a one-time download."
+                missingPack = pair
             default: notice = "Translation isn't available for this language pair."
             }
         }

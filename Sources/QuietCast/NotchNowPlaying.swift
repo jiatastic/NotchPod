@@ -26,6 +26,7 @@ struct NotchNowPlayingView: View {
                             .font(.system(size: 12)).foregroundStyle(Palette.secondary).lineLimit(1)
                     }
                     Spacer(minLength: 0)
+                    CaptionMenu()
                     Button { notch.showSearch() } label: {
                         Image(systemName: "magnifyingglass").font(.system(size: 13, weight: .medium))
                             .frame(width: 30, height: 30).contentShape(Rectangle())
@@ -52,8 +53,17 @@ struct NotchNowPlayingView: View {
                     // Without a translation (pack missing), the notice takes the translation's lines.
                     .overlay(alignment: .bottomLeading) {
                         if captions.hasTrack, let notice = captions.notice {
-                            Text(notice).font(.system(size: 11)).foregroundStyle(Palette.tertiary).lineLimit(2)
-                                .frame(maxWidth: .infinity, alignment: .leading).background(Palette.surface)
+                            HStack(spacing: 12) {
+                                Text(captions.downloadingPack == nil ? notice : "Downloading…")
+                                    .font(.system(size: 11)).foregroundStyle(Palette.tertiary).lineLimit(1)
+                                Spacer(minLength: 0)
+                                if captions.missingPack != nil, captions.downloadingPack == nil {
+                                    Button("Download") { captions.downloadMissingPack() }
+                                        .font(.system(size: 11, weight: .semibold)).foregroundStyle(Palette.text)
+                                        .buttonStyle(PressableStyle())
+                                }
+                            }
+                            .frame(maxWidth: .infinity, alignment: .leading).background(Palette.surface)
                         }
                     }
                     .clipped()
@@ -73,6 +83,8 @@ struct NotchNowPlayingView: View {
                 }.frame(maxWidth: .infinity).padding(.top, 8)
             }.padding(.horizontal, Metrics.gutter).padding(.top, 14).padding(.bottom, 18)
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
+                // The system's download prompt is anchored here; don't tuck under it.
+                .onChange(of: captions.downloadingPack != nil) { _, downloading in notch.isInteracting = downloading }
         } else {
             Button { notch.showSearch() } label: {
                 Label("Search episodes or shows", systemImage: "magnifyingglass")
@@ -157,6 +169,36 @@ struct NotchTimeline: View {
     }
 }
 
+/// Captions on/off and the translation language, where the captions are,
+/// instead of only in the menu bar (which the notch can hide).
+private struct CaptionMenu: View {
+    @EnvironmentObject private var captions: CaptionModel
+    var body: some View {
+        Menu {
+            Picker("Captions", selection: $captions.mode) {
+                ForEach(CaptionMode.allCases, id: \.self) { Text($0.title).tag($0) }
+            }.pickerStyle(.inline)
+            if !captions.targets.isEmpty {
+                Picker("Translate To", selection: $captions.target) {
+                    Text("System Language").tag(String?.none)
+                    Divider()
+                    ForEach(captions.targets, id: \.minimalIdentifier) { language in
+                        Text(CaptionModel.name(language)).tag(Optional(language.minimalIdentifier))
+                    }
+                }.pickerStyle(.menu)
+            }
+        } label: {
+            Image(systemName: captions.mode == .off ? "captions.bubble" : "captions.bubble.fill")
+                .font(.system(size: 14, weight: .medium))
+                .foregroundStyle(captions.mode == .off ? Palette.secondary : Palette.text)
+                .frame(width: 30, height: 30).contentShape(Rectangle())
+        }
+        .menuStyle(.button).buttonStyle(.plain).menuIndicator(.hidden).fixedSize()
+        .help("Captions").accessibilityLabel("Captions")
+        .accessibilityValue(captions.mode.title)
+    }
+}
+
 /// Immersive Translate's bilingual reading pattern: the original line stays
 /// primary; the translation sits directly beneath it, quieter, never replacing it.
 struct CaptionView: View {
@@ -230,6 +272,9 @@ struct CaptionTranslator: View {
     private var configuration: TranslationSession.Configuration? {
         captions.translation.map { TranslationSession.Configuration(source: $0.source, target: $0.target) }
     }
+    private var download: TranslationSession.Configuration? {
+        captions.downloadingPack.map { TranslationSession.Configuration(source: $0.source, target: $0.target) }
+    }
     var body: some View {
         Color.clear.frame(width: 0, height: 0).accessibilityHidden(true)
             .translationTask(configuration) { session in
@@ -250,6 +295,11 @@ struct CaptionTranslator: View {
                         return
                     }
                 }
+            }
+            // Asks the system to show its own language-pack download prompt.
+            .translationTask(download) { session in
+                try? await session.prepareTranslation()
+                captions.finishPackDownload()
             }
     }
 }

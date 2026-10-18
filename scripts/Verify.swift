@@ -119,7 +119,7 @@ struct Verify {
             }
             let split = CaptionTranscriber.sentences(words, offset: 45, firstID: 1000, spaced: true)
             try require(split.first?.text == "Hello there." && split.first?.start == 45 && split[1].text.hasPrefix("After a pause"), "Sentence split on punctuation and pause")
-            try require(split.allSatisfy { $0.text.split(separator: " ").count <= 10 } && split.map(\.id) == Array(1000..<1000 + split.count), "Cues fit one line, stable ids")
+            try require(split.allSatisfy { $0.text.split(separator: " ").count <= 8 } && split.map(\.id) == Array(1000..<1000 + split.count), "Cues fit one line, stable ids")
             try require(CaptionTranscriber.sentences([("你好", 0, 0.5), ("世界。", 0.5, 1)], offset: 0, firstID: 0, spaced: false).first?.text == "你好世界。", "CJK joins without spaces")
             print("PASS caption lookup, sentence gaps, normalization, sentence-aware rewind, sentence splitting")
 

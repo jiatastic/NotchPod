@@ -3,7 +3,7 @@ set -euo pipefail
 cd "$(dirname "$0")/.."
 bash scripts/swift.sh build -c release -j 2
 BIN="$(bash scripts/swift.sh build -c release --show-bin-path)"
-APP="$PWD/dist/Listen.app"
+APP="$PWD/dist/NotchPod.app"
 mkdir -p "$APP/Contents/MacOS" "$APP/Contents/Resources"
 cp "$BIN/QuietCast" "$APP/Contents/MacOS/QuietCast"
 cp Resources/Info.plist "$APP/Contents/Info.plist"

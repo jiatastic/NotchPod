@@ -10,7 +10,7 @@ Requires macOS 14+ and Swift 6+ Command Line Tools or Xcode. No third-party depe
 
 ```sh
 bash scripts/build-app.sh
-open dist/Listen.app
+open dist/NotchPod.app
 ```
 
 The bundle is locally ad-hoc signed, not notarized for distribution. The package/executable and project directory still use QuietCast internally to preserve existing data and tooling.

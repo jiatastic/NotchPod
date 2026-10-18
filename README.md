@@ -1,7 +1,7 @@
 <h1 align="center">
-  <img src="docs/images/icon.png" alt="Earshot" width="128">
+  <img src="docs/images/icon.png" alt="NotchPod" width="128">
   <br>
-  Earshot
+  NotchPod
 </h1>
 
 <p align="center">
@@ -15,15 +15,16 @@
   <img src="https://img.shields.io/badge/Swift-6-F05138?logo=swift&logoColor=white" alt="Swift 6">
   <img src="https://img.shields.io/badge/dependencies-none-brightgreen" alt="No dependencies">
   <img src="https://img.shields.io/badge/privacy-on--device-blue" alt="On-device">
+  <img src="https://img.shields.io/github/license/jiatastic/NotchPod" alt="GPL-3.0">
 </p>
 
 <p align="center">
-  <img src="docs/images/player.png" alt="Earshot open in the notch, showing an episode with English and Chinese captions" width="820">
+  <img src="docs/images/player.png" alt="NotchPod open in the notch, showing an episode with English and Chinese captions" width="820">
 </p>
 
-Earshot turns the notch into a quiet little podcast player. Hover over the camera and the player slides out; move away and it tucks back in while the audio keeps going. It has no main window, no Dock icon and no account.
+NotchPod turns the notch into a quiet little podcast player. Hover over the camera and the player slides out; move away and it tucks back in while the audio keeps going. It has no main window, no Dock icon and no account.
 
-Turn on captions and Earshot **transcribes the episode on your Mac** a little ahead of where you're listening, then **translates it into your language**. While you work, the current line sits under the notch, so a glance is enough to follow a podcast in a language you're still learning.
+Turn on captions and NotchPod **transcribes the episode on your Mac** a little ahead of where you're listening, then **translates it into your language**. While you work, the current line sits under the notch, so a glance is enough to follow a podcast in a language you're still learning.
 
 <p align="center">
   <img src="docs/images/captions-tucked.png" alt="A one-line translated caption hanging under the tucked notch" width="820">
@@ -55,28 +56,38 @@ Turn on captions and Earshot **transcribes the episode on your Mac** a little ah
 ## Installation
 
 **Requirements**
-- A Mac with a notch, running macOS 14 Sonoma or later. On Macs without a notch, Earshot opens as a menu-bar popover instead.
+- A Mac with a notch, running macOS 14 Sonoma or later. On Macs without a notch, NotchPod opens as a menu-bar popover instead.
 - macOS 15 or later for caption translation. Transcription works on 14.
-- Xcode or the Command Line Tools with Swift 6, to build.
+- To build from source only: Xcode or the Command Line Tools with Swift 6.
 
-There are no prebuilt releases yet, so build it from source:
+### Download
+
+**[⬇ Download NotchPod.zip](https://github.com/jiatastic/NotchPod/releases/latest/download/NotchPod.zip)**, unzip it, and move **NotchPod** to `/Applications`.
+
+> [!IMPORTANT]
+> NotchPod isn't notarized yet (that needs a paid Apple Developer account), so macOS will block the first launch. Run this once, then open it normally:
+>
+> ```bash
+> xattr -dr com.apple.quarantine /Applications/NotchPod.app
+> ```
+>
+> Or try to open it, then go to **System Settings → Privacy & Security** and click **Open Anyway**.
+
+### Build from source
 
 ```bash
-git clone https://github.com/jiatastic/Earshot.git
-cd Earshot
+git clone https://github.com/jiatastic/NotchPod.git
+cd NotchPod
 bash scripts/build-app.sh
-open dist/Listen.app
+open dist/NotchPod.app
 ```
-
-> [!NOTE]
-> The app is ad-hoc signed and not notarized. If macOS blocks it, run `xattr -dr com.apple.quarantine dist/Listen.app` and open it again.
 
 ## Usage
 
 1. **Hover the notch** to open the player. Move away and it tucks back in; the audio keeps playing.
 2. **Click 🔍** to search for an episode or show, or to pick from what you follow and listened to recently.
-3. **Turn on captions** from the menu-bar waveform: **Captions → Original** or **Bilingual**.
-4. **For translations,** download your language once in **System Settings → General → Language & Region → Translation Languages**. Earshot shows a reminder if it's missing.
+3. **Click the captions button** next to search to turn on **Original** or **Bilingual** captions and pick the language to **Translate To**.
+4. **First time translating into a language?** Click **Download** under the captions; macOS fetches the language pack once.
 
 | Shortcut | Action |
 | --- | --- |
@@ -98,7 +109,7 @@ Shortcuts work while the player has focus.
 - [x] Sentence-aware rewind
 - [ ] Notarized releases and a Homebrew cask
 - [ ] `SpeechAnalyzer` (macOS 26) for better long-form accuracy and punctuation
-- [ ] Choose the translation language in the app
+- [x] Choose the translation language in the notch
 - [ ] Click a word in a caption to look it up
 - [ ] Search inside an episode's transcript and jump to that moment
 
@@ -116,3 +127,7 @@ The project has no third-party dependencies. [`docs/DEVELOPMENT.md`](docs/DEVELO
 - [boring.notch](https://github.com/TheBoredTeam/boring.notch) showed how much a notch can do.
 - [Immersive Translate](https://immersivetranslate.com) and [Language Reactor](https://www.languagereactor.com) inspired the bilingual caption layout and sentence-level rewind.
 - Apple's Speech, Translation and AVFoundation frameworks do the heavy lifting, entirely on-device.
+
+## License
+
+NotchPod is free software under the [GNU General Public License v3.0](LICENSE).

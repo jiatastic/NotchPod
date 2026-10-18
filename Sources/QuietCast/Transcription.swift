@@ -25,7 +25,7 @@ final class CaptionTranscriber {
                 }
                 status("Preparing captions…")
                 guard await Self.authorize() else {
-                    status("Turn on Speech Recognition for Listen in System Settings to see captions."); return
+                    status("Turn on Speech Recognition for NotchPod in System Settings to see captions."); return
                 }
                 guard let recognizer = Self.recognizer(for: episode) else {
                     status("On-device captions aren't available for this language."); return
@@ -175,7 +175,7 @@ final class CaptionTranscriber {
             current.append(word)
             let terminal = word.text.last.map { ".?!。？！".contains($0) } ?? false
             // On-device punctuation is sparse; length keeps each cue to one strip line.
-            let long = word.end - (current.first?.start ?? word.start) > 4 || current.count >= (spaced ? 10 : 20)
+            let long = word.end - (current.first?.start ?? word.start) > 3.5 || current.count >= (spaced ? 8 : 16)
             if terminal || long || index == words.count - 1 { flush() }
         }
         return cues

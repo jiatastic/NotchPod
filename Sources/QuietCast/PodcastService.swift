@@ -112,7 +112,7 @@ struct PodcastService: Sendable {
     private func fetch(_ url: URL) async throws -> Data {
         var request = URLRequest(url: url)
         request.timeoutInterval = 30
-        request.setValue("Listen/0.8.0 (macOS; podcast reader)", forHTTPHeaderField: "User-Agent")
+        request.setValue("NotchPod/0.9.0 (macOS; podcast reader)", forHTTPHeaderField: "User-Agent")
         let (data, response) = try await URLSession.shared.data(for: request)
         guard let http = response as? HTTPURLResponse, (200..<300).contains(http.statusCode) else {
             throw PodcastError.badResponse

@@ -37,7 +37,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
 private struct NotchPreferencesView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 22) {
-            Text("Listen").font(.system(size: 19, weight: .medium))
+            Text("NotchPod").font(.system(size: 19, weight: .medium))
             Text("Hover the notch to reveal playback. Audio continues when tucked. Displays without a notch use the menu-bar popover instead.")
                 .font(.system(size: 12)).foregroundStyle(Palette.secondary).lineSpacing(4)
         }.padding(28).frame(width: 360).background(Palette.surface).foregroundStyle(Palette.text)

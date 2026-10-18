@@ -34,7 +34,7 @@ struct NotchGeometry: Equatable {
 @MainActor
 final class NotchController: NSObject, ObservableObject, NSWindowDelegate, NSPopoverDelegate, NSMenuDelegate {
     static let shoulder: CGFloat = 12
-    static let captionStripWidth: CGFloat = 420
+    static let captionStripWidth: CGFloat = 340
     static let captionStripHeight: CGFloat = 26
     private static let hoverDelay: UInt64 = 225_000_000
     private static let departureDelay: UInt64 = 250_000_000
@@ -384,9 +384,9 @@ final class NotchController: NSObject, ObservableObject, NSWindowDelegate, NSPop
     }
     private func createStatusItem() {
         let status = NSStatusBar.system.statusItem(withLength: NSStatusItem.squareLength)
-        status.button?.image = NSImage(systemSymbolName: "waveform", accessibilityDescription: "Listen")
+        status.button?.image = NSImage(systemSymbolName: "waveform", accessibilityDescription: "NotchPod")
         status.button?.image?.isTemplate = true
-        status.button?.toolTip = "Listen"
+        status.button?.toolTip = "NotchPod"
         let menu = NSMenu(); menu.delegate = self; menu.autoenablesItems = false
         menu.appearance = NSAppearance(named: .darkAqua)
         func item(_ title: String, _ action: Selector) -> NSMenuItem {
@@ -418,7 +418,7 @@ final class NotchController: NSObject, ObservableObject, NSWindowDelegate, NSPop
         menu.addItem(.separator())
         _ = item("Move to This Display", #selector(moveDisplayAction))
         menu.addItem(.separator())
-        _ = item("Quit Listen", #selector(quitAction))
+        _ = item("Quit NotchPod", #selector(quitAction))
         status.menu = menu; statusItem = status
     }
     @objc private func showPlayerAction() { showPlayer() }
