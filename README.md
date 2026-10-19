@@ -17,14 +17,10 @@
 </p>
 
 <p align="center">
-  <img src="docs/images/player.png" alt="NotchPod open in the notch, showing an episode with English and Chinese captions" width="820">
+  <img src="docs/images/demo.gif" alt="NotchPod: a caption under the tucked notch, then the player springing open with English and Chinese captions" width="760">
 </p>
 
 Hover over the notch to listen; move away and it tucks back in while the audio keeps going. Turn on captions and NotchPod transcribes the episode **on your Mac**, a little ahead of the playhead, then translates it into your language. No window, no Dock icon, no account.
-
-<p align="center">
-  <img src="docs/images/captions-tucked.png" alt="A one-line translated caption hanging under the tucked notch" width="820">
-</p>
 
 ## Install
 
