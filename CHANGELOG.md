@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.9.2
+
+- Fix: bilingual captions start translating as soon as a language pack is installed, without switching episodes or restarting. Previously a pack downloaded while NotchPod was open was ignored.
+- While a translation is on its way, the caption shows "Translating…" instead of a blank line.
+- README: a demo GIF recorded from the real app replaces the screenshots.
+
 ## 0.9.1
 
 - New minimal pixel icon: a small notch with a sound wave.
