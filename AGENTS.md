@@ -38,5 +38,6 @@ It's built with SwiftUI and AppKit, targets macOS 14+, and uses the Swift 6 tool
 
 ## Writing and git
 - Keep the README and docs short. Cut repetition.
-- Commit messages are one imperative line. **Never add Claude or AI as an author or co-author.**
+- Use Conventional Commits: `feat:`, `fix:`, `chore:`, `docs:`, `refactor:`, `test:`, `perf:`, `style:`, `ci:`, `build:`. Write one imperative line, e.g. `fix: keep the caption strip on one line`.
+- **Never add Claude or AI as an author or co-author.**
 - Don't push, release or change repo visibility unless asked.
