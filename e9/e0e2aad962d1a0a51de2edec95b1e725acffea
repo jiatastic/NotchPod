@@ -1,0 +1,21 @@
+Sources/QuietCast/NotchNowPlaying.swift
+  s_f8ccdb591199da::t_44308e6b66e01e 46-47,208-209,219-220
+Sources/QuietCast/Captions.swift
+  s_f8ccdb591199da::t_44308e6b66e01e 215-231
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.23",
+  "base_commit_sha": "e9e0e2aad962d1a0a51de2edec95b1e725acffea",
+  "prompts": {},
+  "sessions": {
+    "s_f8ccdb591199da": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "aae79901-271d-4b7e-ab06-a55aa141c79b",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Haoxiang Jia <jiahaoxiangpersonal@gmail.com>"
+    }
+  }
+}
