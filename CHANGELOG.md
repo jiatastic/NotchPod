@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.9.1
+
+- New minimal pixel icon: a small notch with a sound wave.
+- Expand and collapse now feel like the Dynamic Island: a slower damped spring (0.5s open, 0.45s close), with the content growing out of the notch (scale, fade, un-blur) and retracting smoothly when reversed.
+- The tucked caption strip is narrower (340pt) and cues are shorter, so each one fits on one line.
+- Language names read naturally in English ("Chinese (Simplified)"), and the missing-pack notice is one line with a Download button.
+- Install with one line (`curl … | bash`) or from a drag-to-Applications DMG.
+- End-to-end tests replace unit tests.
+
 ## 0.9.0
 
 First public release, as **NotchPod** (internal identifiers keep the original QuietCast name so existing data loads). Captions are controlled from a captions button in the notch player: Off / Original / Bilingual and **Translate To** any of Apple's on-device translation languages, with a one-click **Download** when a language pack is missing. Licensed GPL-3.0.
