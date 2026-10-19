@@ -1,0 +1,27 @@
+Sources/QuietCast/NotchMotion.swift
+  s_f8ccdb591199da::t_ae7a99f5bb743e 14-16,26
+  s_f8ccdb591199da::t_27312015243ebf 17,27,69-70,72-79
+docs/DEVELOPMENT.md
+  s_f8ccdb591199da::t_8553a1fd265db5 1,3-6,9,11,13,15-22,24,26,28-32
+Sources/QuietCast/NotchView.swift
+  s_f8ccdb591199da::t_2b80c00517d0e3 8-15,28-32
+scripts/pixel_icon.py
+  s_f8ccdb591199da::t_67dc0f287d32fa 1-29,31-32,34-35,40-41,49-70
+  s_f8ccdb591199da::t_ae7a99f5bb743e 30,33,36-39,42-48
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.23",
+  "base_commit_sha": "0efa23f97783b3077c90a664aa43a5ffead277f1",
+  "prompts": {},
+  "sessions": {
+    "s_f8ccdb591199da": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "aae79901-271d-4b7e-ab06-a55aa141c79b",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Haoxiang Jia <jiahaoxiangpersonal@gmail.com>"
+    }
+  }
+}
