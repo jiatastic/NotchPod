@@ -1,0 +1,46 @@
+Sources/QuietCast/Transcription.swift
+  s_f8ccdb591199da::t_ef9529617dd03c 211-215
+AGENTS.md
+  s_f8ccdb591199da::t_51af5a1c2209a9 1-42
+scripts/install.sh
+  s_f8ccdb591199da::t_c5aadfb7e7df69 7-8,22,29
+Sources/QuietCast/Captions.swift
+  s_f8ccdb591199da::t_2778952226fc60 108-109
+  s_f8ccdb591199da::t_b4bca24b147eec 111-119,220
+CLAUDE.md
+  s_f8ccdb591199da::t_427781ea595328 1
+docs/DEVELOPMENT.md
+  s_f8ccdb591199da::t_427781ea595328 5
+scripts/e2e.sh
+  s_f8ccdb591199da::t_c5aadfb7e7df69 1-25
+scripts/e2e/Info.plist
+  s_f8ccdb591199da::t_c5aadfb7e7df69 1-9
+scripts/e2e/E2E.swift
+  s_f8ccdb591199da::t_4f62a72a740936 1-77,80-103,109-161
+  s_f8ccdb591199da::t_8359ff306b2ab4 78-79
+  s_f8ccdb591199da::t_2778952226fc60 104-108
+README.md
+  s_f8ccdb591199da::t_427781ea595328 56
+Sources/QuietCast/NotchView.swift
+  s_f8ccdb591199da::t_ef9529617dd03c 117
+.gitignore
+  s_f8ccdb591199da::t_c5aadfb7e7df69 4
+Package.swift
+  s_f8ccdb591199da::t_c5aadfb7e7df69 9
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.23",
+  "base_commit_sha": "edd62d54f796128ce223d16c0d5615ec0ae80424",
+  "prompts": {},
+  "sessions": {
+    "s_f8ccdb591199da": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "aae79901-271d-4b7e-ab06-a55aa141c79b",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Haoxiang Jia <jiahaoxiangpersonal@gmail.com>"
+    }
+  }
+}
