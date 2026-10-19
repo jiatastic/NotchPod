@@ -1,0 +1,27 @@
+scripts/e2e/Demo.swift
+  s_f8ccdb591199da::t_ffcd124a1e847a 33,79
+  s_f8ccdb591199da::t_1d06c15da95ee6 91-92,95-96,126,128-130
+  s_f8ccdb591199da::t_2c6c29e8d6e0c9 34,76
+  s_f8ccdb591199da::t_037e07d70e4f00 11,13-14,29-31,80-89,93-94,97-99,109-110,114-115,120,123-125,127
+  s_f8ccdb591199da::t_e8ce69a91b9e3b 23-27,48
+  s_f8ccdb591199da::t_ec7a7e569b3d90 12,105-108,112
+  s_f8ccdb591199da::t_50f3e75c0e0044 116-119
+  s_f8ccdb591199da::t_990cbcc49a1dc1 35-36
+  s_f8ccdb591199da::t_d03944f54cd5ca 113
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.23",
+  "base_commit_sha": "599210cab543c26742037048cac1695225924e2f",
+  "prompts": {},
+  "sessions": {
+    "s_f8ccdb591199da": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "aae79901-271d-4b7e-ab06-a55aa141c79b",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Haoxiang Jia <jiahaoxiangpersonal@gmail.com>"
+    }
+  }
+}
