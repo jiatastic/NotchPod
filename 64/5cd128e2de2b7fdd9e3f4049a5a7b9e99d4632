@@ -1,0 +1,21 @@
+scripts/install.sh
+  s_f8ccdb591199da::t_d83e0af75ba4fc 1-29
+README.md
+  s_f8ccdb591199da::t_4e04ab5aae18ba 8,23,29,31,34,37,39,41,43-47,49,51,54-56,59,61,63
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.23",
+  "base_commit_sha": "645cd128e2de2b7fdd9e3f4049a5a7b9e99d4632",
+  "prompts": {},
+  "sessions": {
+    "s_f8ccdb591199da": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "aae79901-271d-4b7e-ab06-a55aa141c79b",
+        "model": "unknown"
+      },
+      "human_author": "Haoxiang Jia <jiahaoxiangpersonal@gmail.com>"
+    }
+  }
+}
