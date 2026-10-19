@@ -1,0 +1,21 @@
+scripts/e2e/E2E.swift
+  s_f8ccdb591199da::t_817c1d07b7eebc 140,148-151
+scripts/pixel_icon.py
+  s_f8ccdb591199da::t_1de41faa1d6a27 2-3,6-29,31-33,36-42,45,49-51
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.23",
+  "base_commit_sha": "8b24d414620bdf52e91152b5279345b3c5486880",
+  "prompts": {},
+  "sessions": {
+    "s_f8ccdb591199da": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "aae79901-271d-4b7e-ab06-a55aa141c79b",
+        "model": "unknown"
+      },
+      "human_author": "Haoxiang Jia <jiahaoxiangpersonal@gmail.com>"
+    }
+  }
+}
