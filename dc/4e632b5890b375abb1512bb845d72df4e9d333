@@ -1,0 +1,23 @@
+Resources/Info.plist
+  s_f8ccdb591199da::t_b5c083ce230363 24,26
+Sources/QuietCast/PodcastService.swift
+  s_f8ccdb591199da::t_de374e49eaf42c 115
+CHANGELOG.md
+  s_f8ccdb591199da::t_de374e49eaf42c 3-11
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.23",
+  "base_commit_sha": "dc4e632b5890b375abb1512bb845d72df4e9d333",
+  "prompts": {},
+  "sessions": {
+    "s_f8ccdb591199da": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "aae79901-271d-4b7e-ab06-a55aa141c79b",
+        "model": "unknown"
+      },
+      "human_author": "Haoxiang Jia <jiahaoxiangpersonal@gmail.com>"
+    }
+  }
+}
