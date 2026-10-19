@@ -1,0 +1,19 @@
+README.md
+  s_f8ccdb591199da::t_8d5f23b0135dc4 20
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.23",
+  "base_commit_sha": "938209ee0c46d57c674dc605f91f359b63f87c55",
+  "prompts": {},
+  "sessions": {
+    "s_f8ccdb591199da": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "aae79901-271d-4b7e-ab06-a55aa141c79b",
+        "model": "unknown"
+      },
+      "human_author": "Haoxiang Jia <jiahaoxiangpersonal@gmail.com>"
+    }
+  }
+}
