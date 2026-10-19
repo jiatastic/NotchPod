@@ -137,6 +137,7 @@ struct E2E {
         let hosting = NSHostingView(rootView: root)
         let window = NSWindow(contentRect: NSRect(x: -4000, y: 0, width: width, height: height),
                               styleMask: [.borderless], backing: .buffered, defer: false)
+        window.isReleasedWhenClosed = false
         window.appearance = NSAppearance(named: .darkAqua)
         window.contentView = hosting; window.orderFront(nil)
         try? await Task.sleep(nanoseconds: 2_500_000_000) // artwork and layout settle
@@ -144,7 +145,10 @@ struct E2E {
             hosting.cacheDisplay(in: hosting.bounds, to: bitmap)
             try? bitmap.representation(using: .png, properties: [:])?.write(to: shots.appendingPathComponent("\(name).png"))
         }
-        window.orderOut(nil)
+        // Tear the view down: a hidden but live tree keeps reacting to model
+        // changes (e.g. a show page turning into search and cancelling it).
+        window.contentView = nil
+        window.close()
     }
     @MainActor static func until(_ what: String, _ seconds: Double, _ condition: () -> Bool) async throws {
         let deadline = Date().addingTimeInterval(seconds)
