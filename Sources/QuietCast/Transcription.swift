@@ -208,7 +208,11 @@ enum TranscriptCache {
         var complete: Bool
     }
     static func folder() throws -> URL {
-        try FileManager.default.url(for: .cachesDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
+        // e2e runs point this elsewhere so they never read or clear real caches.
+        if let override = ProcessInfo.processInfo.environment["QUIETCAST_CACHE_DIR"] {
+            return URL(fileURLWithPath: override, isDirectory: true)
+        }
+        return try FileManager.default.url(for: .cachesDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
             .appendingPathComponent("QuietCast/Transcripts", isDirectory: true)
     }
     static func key(_ episode: Episode) -> String {

@@ -6,8 +6,7 @@ let package = Package(
     platforms: [.macOS(.v14)],
     products: [.executable(name: "QuietCast", targets: ["QuietCast"])],
     targets: [
-        .executableTarget(name: "QuietCast"),
-        .testTarget(name: "QuietCastTests", dependencies: ["QuietCast"])
+        .executableTarget(name: "QuietCast")
     ],
     swiftLanguageModes: [.v5]
 )

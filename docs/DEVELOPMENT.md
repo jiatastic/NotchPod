@@ -2,7 +2,7 @@
 
 ```bash
 bash scripts/build-app.sh && open dist/NotchPod.app   # build + run
-bash scripts/test.sh                                  # tests (add QUIETCAST_LIVE_TESTS=1 for network/playback)
+bash scripts/e2e.sh                                   # e2e: real feed, playback, captions, UI shots, installer
 python3 scripts/pixel_icon.py <dir>.iconset           # regenerate the pixel icon
 ```
 

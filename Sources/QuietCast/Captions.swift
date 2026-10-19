@@ -105,9 +105,18 @@ final class CaptionModel: ObservableObject {
         transcriber.cancel(); stopClock(); subscriptions.removeAll()
     }
 
-    /// "Chinese", "Chinese (Taiwan)", "English (United Kingdom)", … in the listener's locale.
+    /// "Chinese (Simplified)", "Chinese (Taiwan)", "English": English like the rest of
+    /// the UI, and never the listener's region ("zh-Hans-US" is not "Chinese (US)").
     static func name(_ language: Locale.Language) -> String {
-        Locale.current.localizedString(forIdentifier: language.minimalIdentifier) ?? language.minimalIdentifier
+        let english = Locale(identifier: "en_US")
+        let code = language.languageCode?.identifier ?? language.minimalIdentifier
+        let base = english.localizedString(forLanguageCode: code) ?? code
+        let qualifier: String? = switch language.script?.identifier {
+        case "Hans": "Simplified"
+        case "Hant": "Traditional"
+        default: language.region.flatMap { english.localizedString(forRegionCode: $0.identifier) }
+        }
+        return qualifier.map { "\(base) (\($0))" } ?? base
     }
     /// Untranslated cues nearest ahead of the playhead first.
     func untranslated(limit: Int) -> [CaptionCue] {
@@ -208,7 +217,7 @@ final class CaptionModel: ObservableObject {
             switch status {
             case .installed: translation = pair
             case .supported:
-                notice = "\(Self.name(pair.target)) translations need a one-time download."
+                notice = "\(Self.name(pair.target)) isn't downloaded yet."
                 missingPack = pair
             default: notice = "Translation isn't available for this language pair."
             }

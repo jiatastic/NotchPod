@@ -4,8 +4,8 @@
 set -euo pipefail
 
 URL="https://github.com/jiatastic/NotchPod/releases/latest/download/NotchPod.zip"
-DEST="/Applications"
-[[ -w "$DEST" ]] || DEST="$HOME/Applications"
+DEST="${NOTCHPOD_INSTALL_DIR:-/Applications}"
+[[ -w "$DEST" || -n "${NOTCHPOD_INSTALL_DIR:-}" ]] || DEST="$HOME/Applications"
 mkdir -p "$DEST"
 
 if [[ "$(uname -m)" != "arm64" ]]; then
@@ -19,11 +19,11 @@ curl -fsSL "$URL" -o "$TMP/NotchPod.zip"
 ditto -x -k "$TMP/NotchPod.zip" "$TMP"
 
 # Replace a running or older copy.
-pkill -x QuietCast 2>/dev/null || true
+[[ -n "${NOTCHPOD_NO_OPEN:-}" ]] || pkill -x QuietCast 2>/dev/null || true
 rm -rf "$DEST/NotchPod.app"
 ditto "$TMP/NotchPod.app" "$DEST/NotchPod.app"
 # The app isn't notarized; downloaded copies must not carry the quarantine flag.
 xattr -dr com.apple.quarantine "$DEST/NotchPod.app" 2>/dev/null || true
 
 echo "Installed to $DEST/NotchPod.app"
-open "$DEST/NotchPod.app"
+[[ -n "${NOTCHPOD_NO_OPEN:-}" ]] || open "$DEST/NotchPod.app"

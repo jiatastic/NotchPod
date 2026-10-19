@@ -53,7 +53,7 @@ Requires an Apple Silicon Mac with a notch and macOS 14 or later (macOS 15 or la
 ```bash
 git clone https://github.com/jiatastic/NotchPod.git && cd NotchPod
 bash scripts/build-app.sh && open dist/NotchPod.app
-bash scripts/test.sh   # tests
+bash scripts/e2e.sh    # end-to-end tests
 ```
 
 No third-party dependencies. Architecture and design notes: [`docs/DEVELOPMENT.md`](docs/DEVELOPMENT.md). History: [`CHANGELOG.md`](CHANGELOG.md).

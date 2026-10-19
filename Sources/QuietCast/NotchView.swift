@@ -114,7 +114,7 @@ struct NotchSilhouette: Shape {
     }
 }
 
-private struct NotchBrowseView: View {
+struct NotchBrowseView: View {
     @EnvironmentObject private var notch: NotchController
     @EnvironmentObject private var browser: BrowserModel
     @EnvironmentObject private var library: Library
