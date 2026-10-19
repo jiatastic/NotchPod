@@ -212,14 +212,23 @@ final class CaptionModel: ObservableObject {
         translation = nil; notice = nil; missingPack = nil
         guard let pair, #available(macOS 15, *) else { return }
         Task {
-            let status = await LanguageAvailability().status(from: pair.source, to: pair.target)
-            guard requestedTranslation == pair else { return }
-            switch status {
-            case .installed: translation = pair
-            case .supported:
-                notice = "\(Self.name(pair.target)) isn't downloaded yet."
-                missingPack = pair
-            default: notice = "Translation isn't available for this language pair."
+            // A pack downloaded elsewhere (Settings, another app) must start
+            // translating right away, so keep checking while it's missing.
+            while requestedTranslation == pair, translation == nil {
+                let status = await LanguageAvailability().status(from: pair.source, to: pair.target)
+                guard requestedTranslation == pair else { return }
+                switch status {
+                case .installed:
+                    translation = pair; notice = nil; missingPack = nil
+                    return
+                case .supported:
+                    notice = "\(Self.name(pair.target)) isn't downloaded yet."
+                    missingPack = pair
+                default:
+                    notice = "Translation isn't available for this language pair."
+                    return
+                }
+                try? await Task.sleep(nanoseconds: 3_000_000_000)
             }
         }
     }

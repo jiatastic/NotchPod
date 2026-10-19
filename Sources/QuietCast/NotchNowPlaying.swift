@@ -43,7 +43,8 @@ struct NotchNowPlayingView: View {
                 if captions.showsCaptionArea {
                     Group {
                         if captions.hasTrack {
-                            CaptionView(cue: captions.current, bilingual: captions.mode == .bilingual)
+                            CaptionView(cue: captions.current, bilingual: captions.mode == .bilingual,
+                                        translating: captions.translation != nil)
                         } else if let status = captions.status {
                             Text(status).font(.system(size: 12)).foregroundStyle(Palette.tertiary).lineLimit(2)
                                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -204,6 +205,8 @@ private struct CaptionMenu: View {
 struct CaptionView: View {
     let cue: CaptionCue?
     var bilingual = true
+    /// A translator is running, so a missing translation is pending, not absent.
+    var translating = false
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     var body: some View {
@@ -213,6 +216,8 @@ struct CaptionView: View {
                     Text(cue.text).font(.system(size: 14, weight: .medium)).foregroundStyle(Palette.text).lineLimit(2)
                     if bilingual, let translation = cue.translation {
                         Text(translation).font(.system(size: 13)).foregroundStyle(Palette.secondary).lineLimit(2)
+                    } else if bilingual, translating {
+                        Text("Translating…").font(.system(size: 13)).foregroundStyle(Palette.tertiary)
                     }
                 }
                 .lineSpacing(2)
