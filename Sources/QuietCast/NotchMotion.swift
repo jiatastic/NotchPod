@@ -11,7 +11,10 @@ final class NotchFrameAnimator: NSObject {
     private var target = NSRect.zero
     private var velocity = NSSize.zero
     private var lastTime = CACurrentMediaTime()
-    private var frequency: CGFloat = 48
+    // Dynamic-Island-like timing (boring.notch: 0.42s open, 0.45s close):
+    // open ≈ 0.5s with a slight settle, close ≈ 0.45s with no overshoot.
+    private var frequency: CGFloat = 2 * .pi / 0.5
+    private var damping: CGFloat = 0.8
     private var completion: (() -> Void)?
 
     init(window: NSWindow) { self.window = window }
@@ -20,7 +23,8 @@ final class NotchFrameAnimator: NSObject {
         guard let window else { return }
         target = frame
         self.completion = completion
-        frequency = closing ? 58 : 48
+        frequency = 2 * .pi / (closing ? 0.45 : 0.5)
+        damping = closing ? 1 : 0.8
         guard animated, window.frame != frame else {
             cancel()
             window.setFrame(frame, display: true)
@@ -62,13 +66,17 @@ final class NotchFrameAnimator: NSObject {
             window.contentView?.layoutSubtreeIfNeeded()
         }
     }
-    // Exact critically damped spring step; stable across varying frame rates.
+    // Damped spring, integrated in small fixed substeps so it stays stable at
+    // any display refresh rate and keeps velocity when the target changes.
     private func step(_ value: CGFloat, _ velocity: CGFloat, _ goal: CGFloat, _ dt: CGFloat) -> (value: CGFloat, velocity: CGFloat) {
-        let distance = value - goal
-        let coefficient = velocity + frequency * distance
-        let decay = exp(-frequency * dt)
-        return (goal + (distance + coefficient * dt) * decay,
-                (velocity - frequency * coefficient * dt) * decay)
+        var x = value, v = velocity, remaining = dt
+        while remaining > 0 {
+            let h = min(remaining, 1.0 / 480)
+            v += (-frequency * frequency * (x - goal) - 2 * damping * frequency * v) * h
+            x += v * h
+            remaining -= h
+        }
+        return (x, v)
     }
 }
 

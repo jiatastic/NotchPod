@@ -5,6 +5,14 @@ struct NotchRootView: View {
     @EnvironmentObject private var library: Library
     @EnvironmentObject private var player: PodcastPlayer
     @EnvironmentObject private var captions: CaptionModel
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+
+    /// Fades in over the later part of the expansion so the first frames
+    /// show only the growing black shape, never half-drawn controls.
+    static func reveal(_ progress: CGFloat) -> CGFloat {
+        let t = min(1, max(0, (progress - 0.25) / 0.75))
+        return t * t * (3 - 2 * t)
+    }
 
     var body: some View {
         Group {
@@ -17,8 +25,11 @@ struct NotchRootView: View {
                         // Only the live viewport reveals/clips it; no content pop-out.
                         content.allowsHitTesting(notch.presentation == .open)
                             .accessibilityHidden(notch.presentation == .tucked)
-                            // Under a caption strip the player must not peek through.
-                            .opacity(notch.showsCaptionStrip ? Double(min(1, max(0, progress * 2 - 0.3))) : 1)
+                            // Content grows out of the notch with the shape: driven by the
+                            // live frame, so a reversed hover retracts it along the same path.
+                            .scaleEffect(0.8 + 0.2 * progress, anchor: .top)
+                            .opacity(Double(Self.reveal(progress)))
+                            .blur(radius: reduceMotion ? 0 : (1 - progress) * 8)
                     }
                     .overlay(alignment: .top) {
                         if notch.showsCaptionStrip {
