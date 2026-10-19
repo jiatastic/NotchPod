@@ -1,32 +1,29 @@
 #!/usr/bin/env python3
-"""NotchPod's icon: a notch with eyes over two caption lines, on a 16x16 pixel
+"""NotchPod's icon: a small notch with a sound wave under it, on a 16x16 pixel
 grid, scaled with nearest-neighbor. Usage: pixel_icon.py <dir>.iconset"""
 import struct, sys, zlib
 
 ART = """
 ................
-.#KKKKKKKKKKKK#.
-.##KKKKKKKKKK##.
-.##KKKKKKKKKK##.
-.##KKWWKKWWKK##.
-.##KKWWKKWWKK##.
-.##KKKKKKKKKK##.
 .###KKKKKKKK###.
+.####KKKKKK####.
 .##############.
 .##############.
+.#######K######.
+.#####K#K#K####.
+.###K#K#K#K#K##.
+.###K#K#K#K#K##.
+.###K#K#K#K#K##.
+.#####K#K#K####.
+.#######K######.
 .##############.
-.##DDDDDDDDDD##.
 .##############.
-.####GGGGGG####.
 .##############.
 ................
 """
 COLORS = {
     "#": (244, 242, 236),  # off-white body
-    "K": (17, 17, 22),     # the notch
-    "W": (255, 255, 255),  # eyes
-    "D": (17, 17, 22),     # caption: original
-    "G": (150, 148, 144),  # caption: translation, quieter
+    "K": (17, 17, 22),     # the notch, and the sound coming out of it
 }
 GRID = [list(row) for row in ART.strip("\n").split("\n")]
 for y, x in [(1, 1), (1, 14), (14, 1), (14, 14)]:  # pixel-rounded corners
