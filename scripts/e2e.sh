@@ -1,7 +1,7 @@
 #!/bin/bash
 # End-to-end tests: real directory, feed, streaming, on-device captions, the
 # notch UI rendered offscreen (screenshots in e2e-shots/), and the installer.
-#   bash scripts/e2e.sh            E2E_VIDEO=1 bash scripts/e2e.sh
+#   bash scripts/e2e.sh    E2E_VIDEO=1 (video)    E2E_DEMO=1 (record e2e-shots/demo.gif)
 set -euo pipefail
 cd "$(dirname "$0")/.."
 bash scripts/swift.sh build -j 2 >/dev/null
@@ -9,7 +9,7 @@ FLAGS=()
 [[ -f .build/sdk-overlay.json ]] && FLAGS=(-vfsoverlay "$PWD/.build/sdk-overlay.json")
 SOURCES=$(ls Sources/QuietCast/*.swift | grep -v QuietCastApp.swift)
 # An embedded Info.plist lets the harness ask for Speech Recognition like the app.
-xcrun swiftc -swift-version 5 -parse-as-library "${FLAGS[@]}" $SOURCES scripts/e2e/E2E.swift \
+xcrun swiftc -swift-version 5 -parse-as-library "${FLAGS[@]}" $SOURCES scripts/e2e/*.swift \
     -Xlinker -sectcreate -Xlinker __TEXT -Xlinker __info_plist -Xlinker scripts/e2e/Info.plist \
     -o .build/e2e
 codesign -s - -f .build/e2e 2>/dev/null

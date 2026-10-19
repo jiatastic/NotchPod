@@ -93,6 +93,11 @@ struct E2E {
         player.toggle()
         try await until("playing for the tucked strip", 20) { player.isPlaying && captions.current != nil }
         try check(notch.showsCaptionStrip, "Tucked caption strip shows while playing")
+        if ProcessInfo.processInfo.environment["E2E_DEMO"] == "1" {
+            let gif = shots.appendingPathComponent("demo.gif")
+            try await demo(notch, to: gif)
+            pass("demo recorded: \(gif.path)")
+        }
         await render("tucked-captions", width: notch.tuckedWidth + 24, height: notch.tuckedHeight, notch: notch, NotchRootView())
         await render("player-captions", width: 400, height: notch.detailHeight, notch: notch, NotchNowPlayingView())
         player.toggle()
